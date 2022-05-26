@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+// Route::group();
+// Route::get('/',[ProductController::class,'index'])->name('web.index');
+
+Route::name('web.')->group(function () {
+
+
+    Route::controller(ProductController::class)->name('product.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        // Route::get('/', 'index')->name('index');
+        // Route::post('/orders', 'store');
+    });
+
 });
+
