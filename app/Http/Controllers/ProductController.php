@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -15,8 +14,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all()->toArray();
-        return view('product.index', ['products' => $products]);
+        $products = Product::get();
+        return view('product.index', ['products' => $products, 'title' => 'Produtos']);
     }
 
     /**
@@ -26,18 +25,22 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        // return view('product.create');
+        return view('product.create', ['product' => null, 'title' => 'Criar produto']);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreProductRequest  $request
+     * @param  \App\Http\Requests\ProductRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $product = new Product;
+        $product->name = $request->name;
+        $product->save();
+        return redirect()->route('web.product.index')->with('message', 'Dados inseridos com sucesso!')->with('color' , 'success');
     }
 
     /**
@@ -58,20 +61,22 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Product $product)
-    {
-        //
+    {       
+        return view('product.edit', ['product' => $product, 'title' => 'Editar produto']);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateProductRequest  $request
+     * @param  \App\Http\Requests\ProductRequest  $request
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+        $product->name = $request->name;
+        $product->save();
+        return   redirect()->route('web.product.index')->with('message', 'Dados atualizados com sucesso!');
     }
 
     /**
@@ -82,6 +87,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $message = "{$product->name} apagado com sucesso!";
+        $product->delete();
+        return   redirect()->route('web.product.index')->with('message', $message);
+
     }
 }

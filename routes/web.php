@@ -22,13 +22,20 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/',[ProductController::class,'index'])->name('web.index');
 
 Route::name('web.')->group(function () {
+    
+    Route::resource('product',ProductController::class);
+
+    // Route::controller(ProductController::class)->name('product.')->group(function () {
+    //     Route::get('/', 'index')->name('index');
+    //     // Route::get('/atualizar/{product_id}', 'edit')->name('edit');
+    //     // Route::post('/novo/produto', 'update')->name('update');
+    //     // Route::get('/novo/produto', 'create')->name('create');
 
 
-    Route::controller(ProductController::class)->name('product.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        // Route::get('/', 'index')->name('index');
-        // Route::post('/orders', 'store');
-    });
+
+    //     // Route::get('/', 'index')->name('index');
+    //     // Route::post('/orders', 'store');
+    // });
 
 });
 
