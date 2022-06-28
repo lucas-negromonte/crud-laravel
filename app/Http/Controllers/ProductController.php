@@ -37,10 +37,8 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $product = new Product;
-        $product->name = $request->name;
-        $product->save();
-        return redirect()->route('web.product.index')->with('message', 'Dados inseridos com sucesso!')->with('color' , 'success');
+        $product = Product::create($request->all());
+        return redirect()->route('web.product.edit', ['product' => $product->id])->with('message', 'Dados inseridos com sucesso!')->with('color', 'success');
     }
 
     /**
@@ -61,7 +59,7 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Product $product)
-    {       
+    {
         return view('product.edit', ['product' => $product, 'title' => 'Editar produto']);
     }
 
@@ -74,7 +72,7 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-        $product->name = $request->name;
+        $product->fill($request->all());
         $product->save();
         return   redirect()->route('web.product.index')->with('message', 'Dados atualizados com sucesso!');
     }
@@ -90,6 +88,5 @@ class ProductController extends Controller
         $message = "{$product->name} apagado com sucesso!";
         $product->delete();
         return   redirect()->route('web.product.index')->with('message', $message);
-
     }
 }
